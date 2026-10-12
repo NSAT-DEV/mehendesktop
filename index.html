@@ -200,6 +200,19 @@
             <span class="txt"><span class="k">macOS</span><span class="s" data-mac-size>.dmg disk image</span></span>
             <span class="rec" data-rec-mac hidden>Your system</span>
           </a>
+          <a class="dl" id="dlLinux" href="#download">
+            <svg class="os" viewBox="0 0 24 24" aria-hidden="true">
+              <ellipse cx="12" cy="12.5" rx="7" ry="9" fill="currentColor"/>
+              <ellipse cx="12" cy="14" rx="4" ry="6.2" fill="rgba(0,0,0,.42)"/>
+              <circle cx="9.7" cy="7.6" r="1" fill="rgba(0,0,0,.65)"/>
+              <circle cx="14.3" cy="7.6" r="1" fill="rgba(0,0,0,.65)"/>
+              <path d="M12 8.7 13.5 10.4 10.5 10.4Z" fill="#e6b31a"/>
+              <ellipse cx="9.3" cy="21.2" rx="2" ry="1" fill="#e6b31a"/>
+              <ellipse cx="14.7" cy="21.2" rx="2" ry="1" fill="#e6b31a"/>
+            </svg>
+            <span class="txt"><span class="k">Linux</span><span class="s">.deb package</span></span>
+            <span class="rec" data-rec-linux hidden>Your system</span>
+          </a>
         </div>
 
         <div class="meta-line">
@@ -304,13 +317,29 @@
             <div class="file"><span data-mac-file>Mehen-3.0.0.dmg</span> &middot; <span data-mac-size2>~90 MB</span></div>
             <a class="go secondary" id="goMac" href="#">Download .dmg</a>
           </div>
+          <div class="getcard">
+            <svg class="os" viewBox="0 0 24 24" aria-hidden="true">
+              <ellipse cx="12" cy="12.5" rx="7" ry="9" fill="currentColor"/>
+              <ellipse cx="12" cy="14" rx="4" ry="6.2" fill="rgba(0,0,0,.42)"/>
+              <circle cx="9.7" cy="7.6" r="1" fill="rgba(0,0,0,.65)"/>
+              <circle cx="14.3" cy="7.6" r="1" fill="rgba(0,0,0,.65)"/>
+              <path d="M12 8.7 13.5 10.4 10.5 10.4Z" fill="#e6b31a"/>
+              <ellipse cx="9.3" cy="21.2" rx="2" ry="1" fill="#e6b31a"/>
+              <ellipse cx="14.7" cy="21.2" rx="2" ry="1" fill="#e6b31a"/>
+            </svg>
+            <div class="plat">Linux</div>
+            <div class="file"><span data-linux-file>mehen_3.0.0-1_amd64.deb</span> &middot; <span data-linux-size2>Debian / Ubuntu</span></div>
+            <a class="go secondary" id="goLinux" href="#">Download .deb</a>
+          </div>
         </div>
         <div class="reqs">
-          Requires Windows 10/11 (64-bit) or macOS 11 or later. Each installer bundles its own
-          Java runtime — nothing else to install. <span data-version2>Version 3.0.0</span>.
+          Requires Windows 10/11 (64-bit), macOS 11 or later, or a 64-bit Debian- or Ubuntu-based
+          Linux. Each build bundles its own Java runtime — nothing else to install.
+          <span data-version2>Version 3.0.0</span>.
           <span class="note">The apps aren't code-signed yet, so the first launch shows a security
           prompt: on macOS, right-click the app and choose Open; on Windows, click "More info" then
-          "Run anyway".</span>
+          "Run anyway". On Linux, install the package with
+          <code>sudo apt install ./mehen_3.0.0-1_amd64.deb</code>.</span>
         </div>
       </div>
     </section>
@@ -330,6 +359,7 @@
     version: "3.0.0",
     windows: { href: "https://github.com/NSAT-DEV/mehendesktop/releases/download/Mehen-3.0/Mehen-3.0.0.msi", file: "Mehen-3.0.0.msi", size: "92 MB" },
     mac:     { href: "https://github.com/NSAT-DEV/mehendesktop/releases/download/Mehen-3.0/Mehen-3.0.0.dmg", file: "Mehen-3.0.0.dmg", size: "107 MB" },
+    linux:   { href: "https://github.com/NSAT-DEV/mehendesktop/releases/download/Mehen-3.0/mehen_3.0.0-1_amd64.deb", file: "mehen_3.0.0-1_amd64.deb", size: "84 MB" },
   };
   // ------------------------------------------------------
 
@@ -339,12 +369,16 @@
   // Fill links + labels from CONFIG
   $("#goWin").href = CONFIG.windows.href;
   $("#goMac").href = CONFIG.mac.href;
+  $("#goLinux").href = CONFIG.linux.href;
   $("#dlWin").href = CONFIG.windows.href;
   $("#dlMac").href = CONFIG.mac.href;
+  $("#dlLinux").href = CONFIG.linux.href;
   setAll("[data-win-file]", e => e.textContent = CONFIG.windows.file);
   setAll("[data-mac-file]", e => e.textContent = CONFIG.mac.file);
+  setAll("[data-linux-file]", e => e.textContent = CONFIG.linux.file);
   setAll("[data-win-size2]", e => e.textContent = CONFIG.windows.size);
   setAll("[data-mac-size2]", e => e.textContent = CONFIG.mac.size);
+  setAll("[data-linux-size2]", e => e.textContent = CONFIG.linux.size);
   setAll("[data-version]", e => e.textContent = "v" + CONFIG.version);
   setAll("[data-version2]", e => e.textContent = "Version " + CONFIG.version);
 
@@ -353,5 +387,6 @@
     const p = (navigator.userAgentData?.platform || navigator.platform || navigator.userAgent).toLowerCase();
     if (p.includes("mac")) $("[data-rec-mac]").hidden = false;
     else if (p.includes("win")) $("[data-rec-win]").hidden = false;
+    else if (p.includes("linux")) $("[data-rec-linux]").hidden = false;
   } catch (_) {}
 </script>
