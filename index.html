@@ -1,8 +1,10 @@
 <title>Mehen for Desktop</title>
 <!--
   Mehen desktop homepage.
-  To deploy: host this file, put the installers where the links point, and edit the
-  CONFIG block in the script near the bottom (version, file names, sizes).
+  The download links, file names, sizes and version fill in automatically from the latest
+  GitHub release of nsat-dev/mehendesktop. To publish a new version, create a release and
+  attach the three installers (.msi, .dmg and .deb, any file names). The CONFIG block near
+  the bottom only holds fallback values, used if GitHub can't be reached.
 -->
 <style>
   /* Layout: a dark "museum antiquity" landing — monumental wordmark, the serpent
@@ -339,7 +341,7 @@
           <span class="note">The apps aren't code-signed yet, so the first launch shows a security
           prompt: on macOS, right-click the app and choose Open; on Windows, click "More info" then
           "Run anyway". On Linux, install the package with
-          <code>sudo apt install ./mehen_3.0.1-1_amd64.deb</code>.</span>
+          <code>sudo apt install ./<span data-linux-file>mehen_3.0.1-1_amd64.deb</span></code>.</span>
         </div>
       </div>
     </section>
@@ -354,33 +356,64 @@
 </footer>
 
 <script>
-  // ---- EDIT HERE to point at your hosted installers ----
+  // Fallback values, used only until (or if) the latest release can't be loaded from GitHub.
+  // Everything here is replaced automatically from the latest release; no need to edit it.
   const CONFIG = {
     version: "3.0.1",
-    windows: { href: "https://github.com/NSAT-DEV/mehendesktop/releases/download/Mehen-Desktop-3.0.1/Mehen-3.0.1.msi", file: "Mehen-3.0.1.msi", size: "92 MB" },
-    mac:     { href: "https://github.com/NSAT-DEV/mehendesktop/releases/download/Mehen-Desktop-3.0.1/Mehen-3.0.1.dmg", file: "Mehen-3.0.1.dmg", size: "107 MB" },
-    linux:   { href: "https://github.com/NSAT-DEV/mehendesktop/releases/download/Mehen-Desktop-3.0.1/mehen_3.0.1-1_amd64.deb", file: "mehen_3.0.1-1_amd64.deb", size: "84 MB" },
+    windows: { href: "https://github.com/NSAT-DEV/mehendesktop/releases/download/Mehen-Desktop-3.0.1/Mehen-3.0.1.msi", file: "Mehen-3.0.1.msi", size: "96 MB" },
+    mac:     { href: "https://github.com/NSAT-DEV/mehendesktop/releases/download/Mehen-Desktop-3.0.1/Mehen-3.0.1.dmg", file: "Mehen-3.0.1.dmg", size: "112 MB" },
+    linux:   { href: "https://github.com/NSAT-DEV/mehendesktop/releases/download/Mehen-Desktop-3.0.1/mehen_3.0.1-1_amd64.deb", file: "mehen_3.0.1-1_amd64.deb", size: "88 MB" },
   };
-  // ------------------------------------------------------
 
   const $ = (s, r=document) => r.querySelector(s);
   const setAll = (sel, fn) => document.querySelectorAll(sel).forEach(fn);
 
   // Fill links + labels from CONFIG
-  $("#goWin").href = CONFIG.windows.href;
-  $("#goMac").href = CONFIG.mac.href;
-  $("#goLinux").href = CONFIG.linux.href;
-  $("#dlWin").href = CONFIG.windows.href;
-  $("#dlMac").href = CONFIG.mac.href;
-  $("#dlLinux").href = CONFIG.linux.href;
-  setAll("[data-win-file]", e => e.textContent = CONFIG.windows.file);
-  setAll("[data-mac-file]", e => e.textContent = CONFIG.mac.file);
-  setAll("[data-linux-file]", e => e.textContent = CONFIG.linux.file);
-  setAll("[data-win-size2]", e => e.textContent = CONFIG.windows.size);
-  setAll("[data-mac-size2]", e => e.textContent = CONFIG.mac.size);
-  setAll("[data-linux-size2]", e => e.textContent = CONFIG.linux.size);
-  setAll("[data-version]", e => e.textContent = "v" + CONFIG.version);
-  setAll("[data-version2]", e => e.textContent = "Version " + CONFIG.version);
+  function applyConfig() {
+    $("#goWin").href = CONFIG.windows.href;
+    $("#goMac").href = CONFIG.mac.href;
+    $("#goLinux").href = CONFIG.linux.href;
+    $("#dlWin").href = CONFIG.windows.href;
+    $("#dlMac").href = CONFIG.mac.href;
+    $("#dlLinux").href = CONFIG.linux.href;
+    setAll("[data-win-file]", e => e.textContent = CONFIG.windows.file);
+    setAll("[data-mac-file]", e => e.textContent = CONFIG.mac.file);
+    setAll("[data-linux-file]", e => e.textContent = CONFIG.linux.file);
+    setAll("[data-win-size2]", e => e.textContent = CONFIG.windows.size);
+    setAll("[data-mac-size2]", e => e.textContent = CONFIG.mac.size);
+    setAll("[data-linux-size2]", e => e.textContent = CONFIG.linux.size);
+    setAll("[data-version]", e => e.textContent = "v" + CONFIG.version);
+    setAll("[data-version2]", e => e.textContent = "Version " + CONFIG.version);
+  }
+  applyConfig();
+
+  // Replace the fallback values with the latest GitHub release: its version, and for each
+  // platform the attached installer with that extension (its link, file name and size).
+  (function () {
+    if (!window.fetch) return;
+    const PLATFORMS = { windows: /\.msi$/i, mac: /\.dmg$/i, linux: /\.deb$/i };
+    const versionOf = rel => {
+      const t = (rel.tag_name || "").match(/\d+(?:\.\d+)+/g);
+      if (t) return t[t.length - 1];
+      const n = (rel.name || "").replace(/\s+/g, "").match(/\d+(?:\.\d+)+/);
+      return n ? n[0] : "";
+    };
+    fetch("https://api.github.com/repos/nsat-dev/mehendesktop/releases/latest",
+          { headers: { "Accept": "application/vnd.github+json" } })
+      .then(r => { if (!r.ok) throw new Error("GitHub API returned HTTP " + r.status); return r.json(); })
+      .then(rel => {
+        const v = versionOf(rel);
+        if (v) CONFIG.version = v;
+        for (const [key, pattern] of Object.entries(PLATFORMS)) {
+          const a = (rel.assets || []).find(x => pattern.test(x.name));
+          if (!a) continue;   // keep the fallback for a platform missing from this release
+          CONFIG[key] = { href: a.browser_download_url, file: a.name,
+                          size: Math.round(a.size / 1000000) + " MB" };
+        }
+        applyConfig();
+      })
+      .catch(err => console.warn("[Mehen] Using built-in download details:", err && err.message ? err.message : err));
+  })();
 
   // Recommend the visitor's platform on the hero buttons
   try {
