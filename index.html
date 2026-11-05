@@ -148,6 +148,38 @@
     margin-inline:auto;line-height:1.7}
   .reqs .note{display:block;margin-top:10px;font-size:.82rem;color:var(--muted);opacity:.85}
 
+  /* ---- latest release (filled from GitHub) ---- */
+  .release{margin:30px auto 0;max-width:680px;text-align:left;background:var(--bg);
+    border:1px solid var(--line);border-radius:18px;padding:24px 26px}
+  .release[hidden]{display:none}
+  .release .rel-top{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:6px 16px}
+  .release .rel-tag{font-family:var(--display);text-transform:uppercase;letter-spacing:.14em;
+    font-size:.72rem;color:var(--green);font-weight:700}
+  .release .rel-date{color:var(--muted);font-size:.84rem}
+  .release h3{font-size:1.25rem;margin-top:6px;letter-spacing:.02em}
+  .release .rel-body{color:var(--muted);margin-top:12px;font-size:.95rem;line-height:1.65}
+  .release .rel-body h4{color:var(--ink);font-family:var(--display);font-size:.95rem;
+    letter-spacing:.04em;margin:16px 0 4px}
+  .release .rel-body p{margin:8px 0}
+  .release .rel-body ul{margin:6px 0;padding-left:1.25em}
+  .release .rel-body li{margin:3px 0}
+  .release .rel-body strong{color:var(--ink)}
+  .release .rel-body a{color:var(--gold)}
+
+  /* ---- other platforms ---- */
+  .others{margin:34px auto 0;max-width:680px;padding-top:28px;border-top:1px solid var(--line-soft)}
+  .others h3{font-size:1.15rem;letter-spacing:.03em}
+  .others > p{color:var(--muted);margin-top:6px;font-size:.95rem}
+  .others .row{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin-top:18px}
+  .other{flex:1 1 240px;display:flex;align-items:center;gap:14px;text-align:left;text-decoration:none;
+    background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:16px 18px;color:var(--ink);
+    transition:border-color .2s,transform .18s,background .2s}
+  .other:hover{border-color:var(--gold);background:var(--bg-3);transform:translateY(-1px)}
+  .other svg{width:30px;height:30px;flex:none;color:var(--ink)}
+  .other b{display:block;font-family:var(--display);font-weight:700;letter-spacing:.03em}
+  .other span{display:block;color:var(--muted);font-size:.85rem}
+  .other .arr{margin-left:auto;color:var(--gold);font-size:1.1rem}
+
   /* ---- footer ---- */
   footer{border-top:1px solid var(--line-soft);margin-top:30px}
   .foot-in{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;
@@ -334,6 +366,14 @@
             <a class="go secondary" id="goLinux" href="#">Download .deb</a>
           </div>
         </div>
+        <div class="release" id="release" hidden aria-live="polite">
+          <div class="rel-top">
+            <span class="rel-tag">Latest release</span>
+            <span class="rel-date" id="relDate"></span>
+          </div>
+          <h3 id="relName"></h3>
+          <div class="rel-body" id="relBody"></div>
+        </div>
         <div class="reqs">
           Requires Windows 10/11 (64-bit), macOS 11 or later, or a 64-bit Debian- or Ubuntu-based
           Linux. Each build bundles its own Java runtime — nothing else to install.
@@ -342,6 +382,22 @@
           prompt: on macOS, right-click the app and choose Open; on Windows, click "More info" then
           "Run anyway". On Linux, install the package with
           <code>sudo apt install ./<span data-linux-file>mehen_3.0.1-1_amd64.deb</span></code>.</span>
+        </div>
+        <div class="others">
+          <h3>Also on iPhone, iPad and Android</h3>
+          <p>Take the snake with you. Mehen is also available for mobile devices.</p>
+          <div class="row">
+            <a class="other" href="https://nsat-dev.github.io/mehen/">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M16.4 12.7c0-2 1.6-3 1.7-3-.9-1.4-2.4-1.5-2.9-1.6-1.2-.1-2.4.7-3 .7-.6 0-1.6-.7-2.6-.7-1.3 0-2.6.8-3.2 2-1.4 2.4-.4 6 1 8 .7 1 1.5 2 2.5 2 1 0 1.4-.6 2.6-.6 1.2 0 1.5.6 2.6.6 1 0 1.7-.9 2.4-1.9.7-1.1 1-2.2 1-2.2s-1.9-.7-1.9-2.8Zm-2-7.2c.5-.7.9-1.6.8-2.5-.8 0-1.8.5-2.4 1.2-.5.6-1 1.5-.8 2.4.9.1 1.8-.4 2.4-1.1Z"/></svg>
+              <div><b>iPhone &amp; iPad</b><span>Mehen for iOS</span></div>
+              <span class="arr" aria-hidden="true">&rarr;</span>
+            </a>
+            <a class="other" href="https://nsat-dev.github.io/mehen-droid/">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M17.6 9.48l1.84-3.18a.38.38 0 0 0-.66-.38l-1.86 3.22a11.4 11.4 0 0 0-9.84 0L5.22 5.92a.38.38 0 0 0-.66.38L6.4 9.48A10.8 10.8 0 0 0 1 18h22a10.8 10.8 0 0 0-5.4-8.52ZM7 15.25A1.25 1.25 0 1 1 8.25 14 1.25 1.25 0 0 1 7 15.25Zm10 0A1.25 1.25 0 1 1 18.25 14 1.25 1.25 0 0 1 17 15.25Z"/></svg>
+              <div><b>Android</b><span>Mehen for Android phones and tablets</span></div>
+              <span class="arr" aria-hidden="true">&rarr;</span>
+            </a>
+          </div>
         </div>
       </div>
     </section>
@@ -352,6 +408,7 @@
   <div class="wrap foot-in">
     <span class="copy">&copy; 2026 Neal Puff</span>
     <span>Mehen &mdash; Game of the Snake &middot; Rules reconstruction &copy; James F.R. Masters (2024)</span>
+    <span>Also for <a href="https://nsat-dev.github.io/mehen/">iPhone &amp; iPad</a> &middot; <a href="https://nsat-dev.github.io/mehen-droid/">Android</a></span>
   </div>
 </footer>
 
@@ -387,11 +444,52 @@
   }
   applyConfig();
 
+  // Show the latest release's title, date and notes (GitHub Markdown, rendered simply and safely).
+  function showRelease(rel) {
+    try {
+      const box = $("#release"); if (!box) return;
+      const esc = t => t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+      const inline = t => esc(t)
+        .replace(/`([^`]+)`/g, "<code>$1</code>")
+        .replace(/\*\*([^*]+)\*\*|__([^_]+)__/g, (m, a, b) => "<strong>" + (a || b) + "</strong>")
+        .replace(/(^|[^*\w])\*([^*\s][^*]*)\*/g, "$1<em>$2</em>")
+        .replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g, '<a href="$2" rel="noopener">$1</a>')
+        .replace(/(^|[\s(])(https?:\/\/[^\s<)]+)/g, '$1<a href="$2" rel="noopener">$2</a>');
+      const md = src => {
+        const out = []; let list = false, para = [];
+        const flush = () => { if (para.length) { out.push("<p>" + inline(para.join(" ")) + "</p>"); para = []; } };
+        const endList = () => { if (list) { out.push("</ul>"); list = false; } };
+        for (const raw of (src || "").replace(/\r/g, "").split("\n")) {
+          const line = raw.trim();
+          let m;
+          if (!line) { flush(); endList(); continue; }
+          if ((m = line.match(/^#{1,6}\s+(.*)$/))) { flush(); endList(); out.push("<h4>" + inline(m[1]) + "</h4>"); continue; }
+          if ((m = line.match(/^(?:[-*+]|\d+[.)])\s+(.*)$/))) { flush(); if (!list) { out.push("<ul>"); list = true; } out.push("<li>" + inline(m[1]) + "</li>"); continue; }
+          if (/^(-{3,}|\*{3,})$/.test(line)) { flush(); endList(); continue; }
+          endList(); para.push(line);
+        }
+        flush(); endList();
+        return out.join("");
+      };
+      $("#relName").textContent = rel.name || rel.tag_name || ("Version " + CONFIG.version);
+      const when = rel.published_at ? new Date(rel.published_at) : null;
+      $("#relDate").textContent = when && !isNaN(when)
+        ? "Released " + when.toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" }) : "";
+      const body = md(rel.body);
+      $("#relBody").innerHTML = body;
+      $("#relBody").hidden = !body;
+      box.hidden = false;
+    } catch (e) { console.warn("[Mehen] Could not show release notes:", e && e.message ? e.message : e); }
+  }
+
   // Replace the fallback values with the latest GitHub release: its version, and for each
   // platform the attached installer with that extension (its link, file name and size).
   (function () {
     if (!window.fetch) return;
     const PLATFORMS = { windows: /\.msi$/i, mac: /\.dmg$/i, linux: /\.deb$/i };
+    // Sizes as GitHub shows them (1 MB = 1,048,576 bytes; one decimal under 100 MB).
+    const mb = bytes => { const m = bytes / 1048576;
+      return (m < 100 ? String(Math.round(m * 10) / 10) : String(Math.round(m))) + " MB"; };
     const versionOf = rel => {
       const t = (rel.tag_name || "").match(/\d+(?:\.\d+)+/g);
       if (t) return t[t.length - 1];
@@ -408,9 +506,10 @@
           const a = (rel.assets || []).find(x => pattern.test(x.name));
           if (!a) continue;   // keep the fallback for a platform missing from this release
           CONFIG[key] = { href: a.browser_download_url, file: a.name,
-                          size: Math.round(a.size / 1000000) + " MB" };
+                          size: mb(a.size) };
         }
         applyConfig();
+        showRelease(rel);
       })
       .catch(err => console.warn("[Mehen] Using built-in download details:", err && err.message ? err.message : err));
   })();
