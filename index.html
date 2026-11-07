@@ -3,8 +3,9 @@
   Mehen desktop homepage.
   The download links, file names, sizes and version fill in automatically from the latest
   GitHub release of nsat-dev/mehendesktop. To publish a new version, create a release and
-  attach the three installers (.msi, .dmg and .deb, any file names). The CONFIG block near
-  the bottom only holds fallback values, used if GitHub can't be reached.
+  attach the three installers (.msi, .dmg and .deb, any file names). If GitHub can't be
+  reached, the version, file names and sizes stay hidden and the download buttons open the
+  latest release's page on GitHub.
 -->
 <style>
   /* Layout: a dark "museum antiquity" landing — monumental wordmark, the serpent
@@ -195,6 +196,7 @@
     .features{grid-template-columns:1fr}
     .steps{grid-template-columns:1fr;gap:28px}
   }
+  [data-rel][hidden]{display:none!important}
 </style>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -251,8 +253,8 @@
 
         <div class="meta-line">
           <span>Free</span><span class="dot"></span>
-          <span>No account needed</span><span class="dot"></span>
-          <span data-version>v3.0.1</span>
+          <span>No account needed</span><span class="dot" data-rel="ver" hidden></span>
+          <span data-version data-rel="ver" hidden></span>
         </div>
       </div>
 
@@ -342,13 +344,13 @@
           <div class="getcard">
             <svg class="os" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M3 5.5 10.2 4.5v6.7H3V5.5Zm0 13L10.2 19.5v-6.6H3V18.5Zm8.3 1.1L21 21V12.9h-9.7v6.7ZM11.3 4.3 21 3v8H11.3V4.3Z"/></svg>
             <div class="plat">Windows</div>
-            <div class="file"><span data-win-file>Mehen-3.0.1.msi</span> &middot; <span data-win-size2>92 MB</span></div>
+            <div class="file" data-rel="windows" hidden><span data-win-file></span> &middot; <span data-win-size2></span></div>
             <a class="go" id="goWin" href="#">Download .msi</a>
           </div>
           <div class="getcard">
             <svg class="os" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M16.4 12.7c0-2 1.6-3 1.7-3-.9-1.4-2.4-1.5-2.9-1.6-1.2-.1-2.4.7-3 .7-.6 0-1.6-.7-2.6-.7-1.3 0-2.6.8-3.2 2-1.4 2.4-.4 6 1 8 .7 1 1.5 2 2.5 2 1 0 1.4-.6 2.6-.6 1.2 0 1.5.6 2.6.6 1 0 1.7-.9 2.4-1.9.7-1.1 1-2.2 1-2.2s-1.9-.7-1.9-2.8Zm-2-7.2c.5-.7.9-1.6.8-2.5-.8 0-1.8.5-2.4 1.2-.5.6-1 1.5-.8 2.4.9.1 1.8-.4 2.4-1.1Z"/></svg>
             <div class="plat">macOS</div>
-            <div class="file"><span data-mac-file>Mehen-3.0.1.dmg</span> &middot; <span data-mac-size2>107 MB</span></div>
+            <div class="file" data-rel="mac" hidden><span data-mac-file></span> &middot; <span data-mac-size2></span></div>
             <a class="go secondary" id="goMac" href="#">Download .dmg</a>
           </div>
           <div class="getcard">
@@ -362,7 +364,7 @@
               <ellipse cx="14.7" cy="21.2" rx="2" ry="1" fill="#e6b31a"/>
             </svg>
             <div class="plat">Linux</div>
-            <div class="file"><span data-linux-file>mehen_3.0.1-1_amd64.deb</span> &middot; <span data-linux-size2>Debian / Ubuntu</span></div>
+            <div class="file" data-rel="linux" hidden><span data-linux-file></span> &middot; <span data-linux-size2></span></div>
             <a class="go secondary" id="goLinux" href="#">Download .deb</a>
           </div>
         </div>
@@ -377,7 +379,7 @@
         <div class="reqs">
           Requires Windows 10/11 (64-bit), macOS 11 or later, or a 64-bit Debian- or Ubuntu-based
           Linux. Each build bundles its own Java runtime — nothing else to install.
-          <span data-version2>Version 3.0.1</span>.
+          <span data-version2 data-rel="ver" hidden></span>
           <span class="note">The apps aren't code-signed yet, so the first launch shows a security
           prompt: on macOS, right-click the app and choose Open; on Windows, click "More info" then
           "Run anyway". On Linux, install the package with
@@ -413,13 +415,15 @@
 </footer>
 
 <script>
-  // Fallback values, used only until (or if) the latest release can't be loaded from GitHub.
-  // Everything here is replaced automatically from the latest release; no need to edit it.
+  // Filled in automatically from the latest GitHub release; no need to edit this.
+  // Until (or unless) GitHub answers, the version, file names and sizes stay hidden and
+  // every download button opens the latest release's page, which always has the current files.
+  const LATEST = "https://github.com/NSAT-DEV/mehendesktop/releases/latest";
   const CONFIG = {
-    version: "3.0.1",
-    windows: { href: "https://github.com/NSAT-DEV/mehendesktop/releases/download/Mehen-Desktop-3.0.1/Mehen-3.0.1.msi", file: "Mehen-3.0.1.msi", size: "96 MB" },
-    mac:     { href: "https://github.com/NSAT-DEV/mehendesktop/releases/download/Mehen-Desktop-3.0.1/Mehen-3.0.1.dmg", file: "Mehen-3.0.1.dmg", size: "112 MB" },
-    linux:   { href: "https://github.com/NSAT-DEV/mehendesktop/releases/download/Mehen-Desktop-3.0.1/mehen_3.0.1-1_amd64.deb", file: "mehen_3.0.1-1_amd64.deb", size: "88 MB" },
+    version: "",
+    windows: { href: LATEST, file: "", size: "" },
+    mac:     { href: LATEST, file: "", size: "" },
+    linux:   { href: LATEST, file: "", size: "" },
   };
 
   const $ = (s, r=document) => r.querySelector(s);
@@ -440,7 +444,11 @@
     setAll("[data-mac-size2]", e => e.textContent = CONFIG.mac.size);
     setAll("[data-linux-size2]", e => e.textContent = CONFIG.linux.size);
     setAll("[data-version]", e => e.textContent = "v" + CONFIG.version);
-    setAll("[data-version2]", e => e.textContent = "Version " + CONFIG.version);
+    setAll("[data-version2]", e => e.textContent = "Version " + CONFIG.version + ".");
+    // Show each detail only once it has a real value.
+    setAll('[data-rel="ver"]', e => e.hidden = !CONFIG.version);
+    for (const k of ["windows", "mac", "linux"])
+      setAll('[data-rel="' + k + '"]', e => e.hidden = !CONFIG[k].file);
   }
   applyConfig();
 
@@ -482,7 +490,7 @@
     } catch (e) { console.warn("[Mehen] Could not show release notes:", e && e.message ? e.message : e); }
   }
 
-  // Replace the fallback values with the latest GitHub release: its version, and for each
+  // Fill in the latest GitHub release: its version, and for each
   // platform the attached installer with that extension (its link, file name and size).
   (function () {
     if (!window.fetch) return;
@@ -504,14 +512,14 @@
         if (v) CONFIG.version = v;
         for (const [key, pattern] of Object.entries(PLATFORMS)) {
           const a = (rel.assets || []).find(x => pattern.test(x.name));
-          if (!a) continue;   // keep the fallback for a platform missing from this release
+          if (!a) continue;   // that platform keeps the link to the release page
           CONFIG[key] = { href: a.browser_download_url, file: a.name,
                           size: mb(a.size) };
         }
         applyConfig();
         showRelease(rel);
       })
-      .catch(err => console.warn("[Mehen] Using built-in download details:", err && err.message ? err.message : err));
+      .catch(err => console.warn("[Mehen] Could not load the latest release; download buttons open its page on GitHub:", err && err.message ? err.message : err));
   })();
 
   // Recommend the visitor's platform on the hero buttons
